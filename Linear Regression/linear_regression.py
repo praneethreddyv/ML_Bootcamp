@@ -57,8 +57,9 @@ class LinearRegression:
         # Applying Gradient Descent algorithm
         for i in range(self.num_iters):
             # Parameter update
-            self.theta = self.theta * (1 - (self.alpha * self.lam / self.m)) - (self.alpha / self.m) * (
-                        self.X.T @ (self.X @ self.theta - self.y))
+            theta_temp = self.theta
+            theta_temp[1:,:] = 0
+            self.theta -= (self.alpha / self.m) * (self.X.T @ (self.X @ self.theta - self.y) + self.lam*theta_temp)
             # Saving cost J in every iteration
             self.J_history.append(self.cost_function())
             self.iters.append([i])
