@@ -21,15 +21,11 @@ class LinearRegression:
         self.lam = lam
         self.num_iters = num_iters
 
-    def normalize(self, X):
-        ''' 'normalize' method takes X as argument.
-    Applies Feature Scalling by standardizing the data, adds biasing layer and returns X'''
-        # X = (X - np.mean(X, axis=0))/(np.std(X, axis=0) + np.exp(-9))  "NOT WORKING"
+    def scale(self, X):
+        ''' 'scale' method takes X as argument.
+    Applies Feature Scalling by standardizing the data and returns X'''
         for i in range(X.shape[1]):
-            X[:, i] = (X[:, i] - np.mean(X[:, i])) / (np.std(X[:, i]) + np.exp(-9))
-        m = len(X)
-        X0 = np.ones((m, 1))
-        X = np.hstack((X0, X))
+            X[:, i] = (X[:, i] - np.mean(X[:, i])) / (np.std(X[:, i]) + 0.00001)
         return X
 
     def cost_function(self):
@@ -43,8 +39,9 @@ class LinearRegression:
         ''' 'fit' method takes X, y as arguments.
     Applies Gradient Descent algorithm and updates parameters theta '''
 
-        # Normalization
-        X = self.normalize(X)
+        # Feature Scaling
+        X = self.scale(X)
+        X = np.hstack((np.ones((len(X), 1)), X)) # Adds bias column
         self.X = X
         self.y = y
         self.m, self.n = X.shape
@@ -83,7 +80,8 @@ class LinearRegression:
     def predict(self, X):
         ''' 'predict' method takes X as argument,
     Calculates and returns the predicted values given by the trained model.'''
-        X = self.normalize(X)
+        X = self.scale(X)
+        X = np.hstack((np.ones((len(X), 1)), X))    # Adds bias column
         y_pred = X @ self.theta
         return y_pred
 
