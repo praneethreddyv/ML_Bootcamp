@@ -102,7 +102,6 @@ class LogisticRegression:
 
   def accuracy(self,y,y_pred):
     '''  'accuracy' method takes y(True values), y_pred(Predicted values) and returns the accuracy of the trained model'''
-    m = len(y_test)
     return (np.mean(y==y_pred))*100
 
   def score(self, y, y_pred):
