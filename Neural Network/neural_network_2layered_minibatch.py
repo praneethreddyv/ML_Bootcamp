@@ -35,7 +35,7 @@ class NeuralNetwork:
     return X
 
   def add_bias(self,b):
-    ''' 'add_bias' method takes b(array) and adds a coloum of ones at the start as bias
+    ''' 'add_bias' method takes b(array) and adds a column of ones at the start as bias
     and returns the modified array'''
     return np.hstack((np.ones((len(b),1)),b))
 
@@ -44,10 +44,10 @@ class NeuralNetwork:
     n_cls(number of different target values/classes) and trains the neural network.'''
     
     X = self.scale(X)    # Feature Scaling
-    X = self.add_bias(X)    # Adding bias colunmn
+    X = self.add_bias(X)    # Adding bias column
     m, n = X.shape
 
-    # Coverting y matrix for One vs all classification
+    # Converting y matrix for One vs all classification
     self.n_cls = n_cls
     y_cls = np.zeros((m,self.n_cls))
     for i in range(m):
@@ -65,7 +65,7 @@ class NeuralNetwork:
     for i in range(self.num_iters):
       # Applying FP, BP and gradient descent in mini batches of 128 samples
       for j in range(m//self.bs):
-        # Forward Propogation
+        # Forward Propagation
         a1 = X
         z2 = a1@self.theta1.T
         a2 = self.sigmoid(z2)
@@ -78,7 +78,7 @@ class NeuralNetwork:
         self.J_hist.append(cost)
         self.iters.append(i*self.bs + j)
         
-        # Back Propogation
+        # Back Propagation
         # Finding err(Error), delta, D(gradient).
         err3 = (a3 - y_cls)
         err2 = (err3@self.theta2)*a2*(1-a2)
@@ -102,7 +102,7 @@ class NeuralNetwork:
     plt.title("Cost Function vs Iteration")
 
   def predict(self,X):
-    ''' 'predict' method takes X(Array of features) and returns y_pred(Values predicted by tranined model).'''
+    ''' 'predict' method takes X(Array of features) and returns y_pred(Values predicted by trained model).'''
     X = self.scale(X)
     X = self.add_bias(X)
     a1 = X
@@ -119,8 +119,4 @@ class NeuralNetwork:
     and returns the accuracy value of trained model.'''
     return (np.mean(y==y_pred))*100
 
-num_iters = 1000
-m=20000
-bs = 150
-(num_iters//(140))*(m//bs)
 
