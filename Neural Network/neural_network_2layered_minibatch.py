@@ -13,13 +13,13 @@ import matplotlib.pyplot as plt
 
 class NeuralNetwork:
 
-  def __init__(self, alpha=0.5, lam=0.15, num_iters=10 ,s1=40, batch_size=128):
+  def __init__(self, alpha=0.5, lam=0.15, num_iters=500, hidden_layer_size=40, batch_size=1000):
     ''' '__init__' takes alpha(learning rate), lam(lambda), num_iters(number of iterations), s1(size of hidden layer), 
     batch_size(mini batch size). All of these values have been initialized by default values, but can be changed when required.'''
     self.alpha = alpha
     self.lam = lam
     self.num_iters = num_iters
-    self.s1 = s1
+    self.s1 = hidden_layer_size
     self.bs = batch_size
 
   def sigmoid(self,z):
@@ -61,12 +61,15 @@ class NeuralNetwork:
     # 'J.history' and 'iters' keeps track of cost with each iteration.
     self.J_hist = []
     self.iters = []
+    n = 0
 
     for i in range(self.num_iters):
       # Applying FP, BP and gradient descent in mini batches of 128 samples
       for j in range(m//self.bs):
+        X_mini = X[j*self.bs:(j+1)*self.bs,:]
+        y_mini = y_cls[j*self.bs:(j+1)*self.bs,:]
         # Forward Propagation
-        a1 = X
+        a1 = X_mini
         z2 = a1@self.theta1.T
         a2 = self.sigmoid(z2)
         a2 = self.add_bias(a2)
@@ -74,13 +77,14 @@ class NeuralNetwork:
         a3 = self.sigmoid(z3)
 
         # Cost Function
-        cost = (-1/self.bs)*np.sum(y_cls*np.log(a3) + (1-y_cls)*np.log(1-a3)) + (self.lam/(2*self.bs))*(np.sum(self.theta1[:,1:]**2) + np.sum(self.theta2[:,1:]**2))
+        cost = (-1/self.bs)*np.sum(y_mini*np.log(a3) + (1-y_mini)*np.log(1-a3)) + (self.lam/(2*self.bs))*(np.sum(self.theta1[:,1:]**2) + np.sum(self.theta2[:,1:]**2))
+        n += 1
         self.J_hist.append(cost)
-        self.iters.append(i*self.bs + j)
+        self.iters.append(n)
         
         # Back Propagation
         # Finding err(Error), delta, D(gradient).
-        err3 = (a3 - y_cls)
+        err3 = (a3 - y_mini)
         err2 = (err3@self.theta2)*a2*(1-a2)
         delta2 = err3.T@a2
         delta1 = err2[:,1:].T@a1
