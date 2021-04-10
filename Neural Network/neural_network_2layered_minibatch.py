@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 class NeuralNetwork:
 
-  def __init__(self, alpha=0.5, lam=0.15, num_iters=500, hidden_layer_size=40, batch_size=1000):
+  def __init__(self, alpha=0.5, lam=0.15, num_iters=50, hidden_layer_size=40, batch_size=500):
     ''' '__init__' takes alpha(learning rate), lam(lambda), num_iters(number of iterations), s1(size of hidden layer), 
     batch_size(mini batch size). All of these values have been initialized by default values, but can be changed when required.'''
     self.alpha = alpha
@@ -92,8 +92,8 @@ class NeuralNetwork:
         theta1_temp[:,0] = 0
         theta2_temp = self.theta2
         theta2_temp[:,0] = 0
-        D2 = (1/m)*(delta2 + self.lam*theta2_temp)
-        D1 = (1/m)*(delta1 + self.lam*theta1_temp)
+        D2 = (1/self.bs)*(delta2 + self.lam*theta2_temp)
+        D1 = (1/self.bs)*(delta1 + self.lam*theta1_temp)
         # Parameter update.
         self.theta1 -= self.alpha*(D1)
         self.theta2 -= self.alpha*(D2)
