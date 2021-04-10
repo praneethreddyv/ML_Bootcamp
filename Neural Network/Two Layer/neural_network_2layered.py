@@ -14,13 +14,13 @@ import matplotlib.pyplot as plt
 
 class NeuralNetwork:
 
-    def __init__(self, alpha=0.5, lam=0.15, num_iters=1000, s1=40):
+    def __init__(self, alpha=0.5, lam=0.15, num_iters=1000, hidden_layer_size=40):
         ''' '__init__' takes alpha(learning rate), lam(lambda), num_iters(number of iterations) and s1(size of hidden layer).
     All of these values have been initialized by default values, but can be changed when required.'''
         self.alpha = alpha
         self.lam = lam
         self.num_iters = num_iters
-        self.s1 = s1
+        self.s1 = hidden_layer_size
 
     def sigmoid(self, z):
         ''' 'sigmoid' method takes z as argument and returns sigmoid value of it.'''
