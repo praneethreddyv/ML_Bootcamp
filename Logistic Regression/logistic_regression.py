@@ -30,14 +30,14 @@ class LogisticRegression:
   def hypothesis(self, X, theta):
     ''' 'hypothesis' method takes X, theta as arguments.
     Calculates and returns hypothesis values'''
-    h = (self.sigmoid(X@self.theta.T))
+    h = (self.sigmoid(X@theta.T))
     return h
 
   def cost(self, X, y, theta):
     ''' 'cost' method takes X, y, theta as arguments and returns cost value.'''
     m, n = X.shape
-    h = self.hypothesis(X,self.theta)
-    cost = (-1/m)*np.sum(y*np.log(h + 0.00001) + (1-y)*np.log(1-h + 0.00001)) + (self.lam/(2*m))*(np.sum(self.theta[:,1:]**2))
+    h = self.hypothesis(X,theta)
+    cost = (-1/m)*np.sum(y*np.log(h + 0.00001) + (1-y)*np.log(1-h + 0.00001)) + (self.lam/(2*m))*(np.sum(theta[:,1:]**2))
     return cost
 
   def fit(self, X, y, n_cls):
