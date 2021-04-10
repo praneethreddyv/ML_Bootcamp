@@ -28,12 +28,18 @@ class LinearRegression:
             X[:, i] = (X[:, i] - np.mean(X[:, i])) / (np.std(X[:, i]) + 0.00001)
         return X
 
-    def cost_function(self):
-        ''' 'cost_function' method takes no arguments, returns cost value with regularization'''
-        h = self.X @ self.theta  # h stands for hypothesis
-        J = (1 / (2 * self.m)) * np.sum((h - self.y) ** 2) + (self.lam / (self.m * 2)) * np.sum(
-            self.theta[1:, :] ** 2)  # j stands for cost value
+    def cost_function(self,X,y,theta):
+        ''' 'cost' method takes X, y, theta as arguments and returns cost value with regularizatoin.'''
+
+        h = self.hypothesis(X,theta)  # h stands for hypothesis
+        J = (1 / (2 * self.m)) * np.sum((h - y) ** 2) + (self.lam / (self.m * 2)) * np.sum(
+            theta[1:, :] ** 2)  # J stands for cost value
         return J
+    
+    def hypothesis(self,X,theta):
+        ''' 'hypothesis' method takes X, theta as arguments and returns (h)hypothesis value. '''
+        h = X @ theta
+        return h
 
     def fit(self, X, y):
         ''' 'fit' method takes X, y as arguments.
@@ -42,12 +48,10 @@ class LinearRegression:
         # Feature Scaling
         X = self.scale(X)
         X = np.hstack((np.ones((len(X), 1)), X)) # Adds bias column
-        self.X = X
-        self.y = y
-        self.m, self.n = X.shape
+        m, n = X.shape
 
         # Initializing parameter vector theta
-        self.theta = np.zeros((self.n, 1))
+        self.theta = np.zeros((n, 1))
 
         # Initializing some useful variables
         # 'J.history' and 'iters' keeps track of cost with each iteration.
@@ -59,9 +63,10 @@ class LinearRegression:
             # Parameter update
             theta_temp = self.theta
             theta_temp[1:,:] = 0
-            self.theta -= (self.alpha / self.m) * (self.X.T @ (self.X @ self.theta - self.y) + self.lam*theta_temp)
+            h = self.hypothesis(X,self.theta)
+            self.theta -= (self.alpha / m) * (X.T @ (X @ self.theta - y) + self.lam*theta_temp)
             # Saving cost J in every iteration
-            self.J_history.append(self.cost_function())
+            self.J_history.append(self.cost_function(X,y,self.theta))
             self.iters.append([i])
 
     def plot(self):
