@@ -30,9 +30,9 @@ class LinearRegression:
 
     def cost_function(self,X,y,theta):
         ''' 'cost' method takes X, y, theta as arguments and returns cost value with regularizatoin.'''
-
+        m, n = X.shape
         h = self.hypothesis(X,theta)  # h stands for hypothesis
-        J = (1 / (2 * self.m)) * np.sum((h - y) ** 2) + (self.lam / (self.m * 2)) * np.sum(
+        J = (1 / (2 * m)) * np.sum((h - y) ** 2) + (self.lam / (m * 2)) * np.sum(
             theta[1:, :] ** 2)  # J stands for cost value
         return J
     
